@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "ang15-ssr": {
+      "hosting": {
+        "ang15": [
+          "ang15-ssr"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "ang15-ssr"
+  }
+}

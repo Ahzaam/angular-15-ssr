@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/ang15",
+            "outputPath": "dist/ang15/browser",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -91,8 +91,80 @@
             ],
             "scripts": []
           }
+        },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/ang15/server",
+            "main": "server.ts",
+            "tsConfig": "tsconfig.server.json"
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "media"
+            },
+            "development": {
+              "optimization": false,
+              "sourceMap": true,
+              "extractLicenses": false,
+              "vendorChunk": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve-ssr": {
+          "builder": "@nguniversal/builders:ssr-dev-server",
+          "configurations": {
+            "development": {
+              "browserTarget": "ang15:build:development",
+              "serverTarget": "ang15:server:development"
+            },
+            "production": {
+              "browserTarget": "ang15:build:production",
+              "serverTarget": "ang15:server:production"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "prerender": {
+          "builder": "@nguniversal/builders:prerender",
+          "options": {
+            "routes": [
+              "/"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "ang15:build:production",
+              "serverTarget": "ang15:server:production"
+            },
+            "development": {
+              "browserTarget": "ang15:build:development",
+              "serverTarget": "ang15:server:development"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "ssr": "cloud-functions",
+            "prerender": true,
+            "firebaseProject": "ang15-ssr",
+            "firebaseHostingSite": "ang15-ssr",
+            "functionName": "ssr_ang15",
+            "functionsNodeVersion": "16",
+            "region": "us-central1",
+            "browserTarget": "ang15:build:production",
+            "serverTarget": "ang15:server:production",
+            "prerenderTarget": "ang15:prerender:production",
+            "outputPath": "dist/ang15/functions"
+          }
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "ec2d80e8-9a75-4630-990d-9196978fdec7"
   }
 }
